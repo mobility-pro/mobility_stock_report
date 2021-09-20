@@ -50,7 +50,8 @@ frappe.ready(() => {
 		frappe.call({
 			method: 'mobility.mobility.api.get_brands',
 			callback: function(r) {
-				me.form.fields_dict.brand.set_data(r.message)
+				me.form.fields_dict.brand.set_data(r.message);
+				me.form.fields_dict.item_name.$input.val('');
 			}
 		});
 	}

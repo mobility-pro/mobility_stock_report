@@ -10,7 +10,11 @@ def get_brands():
 
 @frappe.whitelist()
 def get_brand_items(brand):
-	items = frappe.db.get_list('Item', filters={'brand': brand}, pluck='name')
+	r = frappe.db.sql('''SELECT DISTINCT i.item_code FROM `tabItem` i 
+		INNER JOIN `tabBin` b ON i.item_code = b.item_code 
+		AND b.actual_qty > 0.0
+		AND i.brand = '{0}' '''.format(brand), as_list=True)
+	items = [row[0] for row in r]
 	return items
 
 @frappe.whitelist()
@@ -28,7 +32,7 @@ def get_stock_details(brand, item, qty):
 	data = []
 	for row in bins:
 		stock_status = ''
-		if row.actual_qty > frappe.utils.flt(qty):
+		if row.actual_qty >= frappe.utils.flt(qty):
 			stock_status = _('Available')
 		elif row.actual_qty == frappe.utils.flt(0): 
 			stock_status = _('Not Available')
