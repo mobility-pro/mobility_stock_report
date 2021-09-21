@@ -30,6 +30,10 @@ def get_stock_details(brand, item, qty):
 	bins = frappe.db.get_list('Bin', filters={'item_code': item, 'warehouse': ['in', warehouse]}, fields=['item_code', 'actual_qty', 'warehouse'])
 	columns = [_('Warehouse'), _('Required Stock Status')]
 	data = []
+	if len(bins) == 1:
+		if bins[0].actual_qty == frappe.utils.flt(0): 
+			return {'columns': columns, 'data' : data}
+
 	for row in bins:
 		stock_status = ''
 		if row.actual_qty >= frappe.utils.flt(qty):
