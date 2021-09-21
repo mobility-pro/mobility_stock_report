@@ -5,6 +5,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "user",
   "brand",
   "item",
   "qty"
@@ -29,11 +30,18 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Qty"
+  },
+  {
+   "default": "__user",
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-16 16:23:50.028835",
+ "modified": "2021-09-21 14:17:45.381231",
  "modified_by": "Administrator",
  "module": "Mobility",
  "name": "Stock Report Log",
@@ -53,5 +61,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "title_field": "user",
  "track_changes": 1
 }

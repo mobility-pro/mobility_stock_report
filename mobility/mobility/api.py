@@ -28,13 +28,22 @@ def get_stock_details(brand, item, qty):
 
 	warehouse = frappe.db.get_list('Warehouse', filters={'show_on_portal': 1}, pluck='name')
 	bins = frappe.db.get_list('Bin', filters={'item_code': item, 'warehouse': ['in', warehouse]}, fields=['item_code', 'actual_qty', 'warehouse'])
-	columns = [_('Warehouse'), _('Required Stock Status')]
-	data = []
+
 	if len(bins) == 1:
 		if bins[0].actual_qty == frappe.utils.flt(0): 
-			return {'columns': columns, 'data' : data}
+			return ''
 
-	for row in bins:
+	response = '''<table class="table table-striped">
+		<thead>
+			<tr>
+			<th scope="col">Sr No.</th>
+			<th scope="col">{0}</th>
+			<th scope="col">{1}</th>
+			</tr>
+		</thead>
+		<tbody>'''.format(_('Warehouse'), _('Required Stock Status'))
+  
+	for idx,row in enumerate(bins):
 		stock_status = ''
 		if row.actual_qty >= frappe.utils.flt(qty):
 			stock_status = _('Available')
@@ -42,9 +51,11 @@ def get_stock_details(brand, item, qty):
 			stock_status = _('Not Available')
 		else:
 			stock_status = _('Not Enough ( {0} Units )').format(row.actual_qty)
-		data.append([row.warehouse, stock_status])
-	response = {
-		'columns': columns,
-		'data' : data
-	}
+		response += '''<tr>
+			<th scope="row">{0}</th>
+			<td>{1}</td>
+			<td>{2}</td>
+			</tr>'''.format(idx+1, row.warehouse, stock_status)
+	response += '''</tbody>
+		</table>'''
 	return response

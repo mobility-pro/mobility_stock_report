@@ -84,7 +84,7 @@ frappe.ready(() => {
 					'qty': qty 
 				},
 				callback: function(r) {
-					const datatable = new DataTable('#datatable', r.message);
+					$('#datatable').html(r.message);
 				}
 			});
 		}
