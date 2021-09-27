@@ -10,10 +10,12 @@ def get_brands():
 
 @frappe.whitelist()
 def get_brand_items(brand):
-	r = frappe.db.sql('''SELECT DISTINCT i.item_code FROM `tabItem` i 
+	r = frappe.db.sql('''SELECT DISTINCT i.item_code FROM ((`tabItem` i 
 		INNER JOIN `tabBin` b ON i.item_code = b.item_code 
 		AND b.actual_qty > 0.0
-		AND i.brand = '{0}' '''.format(brand), as_list=True)
+		AND i.brand = '{0}') 
+		INNER JOIN `tabWarehouse` w ON b.warehouse = w.name 
+		AND w.show_on_portal = 1)'''.format(brand), as_list=True)
 	items = [row[0] for row in r]
 	return items
 
@@ -26,8 +28,7 @@ def get_stock_details(brand, item, qty):
 		'qty': qty
 	}).insert(ignore_permissions=True)
 
-	warehouse = frappe.db.get_list('Warehouse', filters={'show_on_portal': 1}, pluck='name')
-	bins = frappe.db.get_list('Bin', filters={'item_code': item, 'warehouse': ['in', warehouse]}, fields=['item_code', 'actual_qty', 'warehouse'])
+	bins = frappe.db.get_list('Bin', filters={'item_code': item}, fields=['item_code', 'actual_qty', 'warehouse'])
 
 	if len(bins) == 1:
 		if bins[0].actual_qty == frappe.utils.flt(0): 
