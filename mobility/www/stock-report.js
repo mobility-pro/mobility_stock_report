@@ -51,13 +51,16 @@ frappe.ready(() => {
 			method: 'mobility.mobility.api.get_brands',
 			callback: function(r) {
 				me.form.fields_dict.brand.set_data(r.message);
-				me.form.fields_dict.item_name.$input.val('');
 			}
 		});
 	}
 
 	this.get_brand_items = function() {
 		let me = this;
+		me.form.fields_dict.item_name.set_value('');
+		me.form.fields_dict.required_qty.set_value('');
+		$('#datatable').empty();
+
 		frappe.call({
 			method: 'mobility.mobility.api.get_brand_items',
 			args: {
