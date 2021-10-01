@@ -8,6 +8,7 @@
   "user",
   "brand",
   "item",
+  "item_name",
   "qty"
  ],
  "fields": [
@@ -37,11 +38,17 @@
    "fieldtype": "Link",
    "label": "User",
    "options": "User"
+  },
+  {
+   "fetch_from": "item.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-09-21 14:17:45.381231",
+ "modified": "2021-10-01 16:54:29.096089",
  "modified_by": "Administrator",
  "module": "Mobility",
  "name": "Stock Report Log",
@@ -55,8 +62,7 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "sort_field": "modified",

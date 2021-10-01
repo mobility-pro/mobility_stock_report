@@ -17,11 +17,21 @@ frappe.ready(() => {
 				fieldtype: 'Column Break'
 			},
 			{
-				label: __('Item Name'),
+				label: __('Item'),
 				fieldname: 'item_name',
 				fieldtype: 'Autocomplete',
 				reqd: 1,
 				change: () => this.get_stock_details(),
+			},
+			{
+				fieldtype: 'Column Break'
+			},
+			{
+				label: __('Item Name'),
+				fieldname: 'item',
+				fieldtype: 'Data',
+				read_only: 1,
+				default: ' '
 			},
 			{
 				fieldtype: 'Column Break'
@@ -77,6 +87,18 @@ frappe.ready(() => {
 		let brand = me.form.fields_dict.brand.$input.val();
 		let item = me.form.fields_dict.item_name.$input.val();
 		let qty = me.form.fields_dict.required_qty.$input.val();
+
+		if (item) {
+			frappe.call({
+				method: 'mobility.mobility.api.get_item_name',
+				args: {
+					'item': item
+				},
+				callback: function(r) {
+					me.form.fields_dict.item.set_value(r.message);
+				}
+			});
+		}
 
 		if (brand && item && qty) {
 			frappe.call({

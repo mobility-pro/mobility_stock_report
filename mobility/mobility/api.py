@@ -10,12 +10,23 @@ def get_brands():
 
 @frappe.whitelist()
 def get_brand_items(brand):
-	items = frappe.db.sql('''SELECT DISTINCT i.item_code AS value, i.item_name AS label FROM ((`tabItem` i 
+	r = frappe.db.sql('''SELECT DISTINCT i.item_code AS item_code, i.item_name AS item_name FROM ((`tabItem` i 
 		INNER JOIN `tabBin` b ON i.item_code = b.item_code 
 		AND i.brand = '{0}') 
 		INNER JOIN `tabWarehouse` w ON b.warehouse = w.name 
 		AND w.show_on_portal = 1)'''.format(brand), as_dict=True)
+	items = []
+	for d in r:
+		items.append({
+			'label': "{0} ({1})".format(d.item_name, d.item_code),
+			'value': d.item_code
+		})
+
 	return items
+
+@frappe.whitelist()
+def get_item_name(item):
+	return frappe.db.get_value('Item', item, 'item_name')
 
 @frappe.whitelist()
 def get_stock_details(brand, item, qty):
@@ -23,7 +34,8 @@ def get_stock_details(brand, item, qty):
 		'doctype': 'Stock Report Log',
 		'brand': brand,
 		'item': item,
-		'qty': qty
+		'qty': qty,
+		'user': frappe.session.user
 	}).insert(ignore_permissions=True)
 
 	bins = frappe.db.get_list('Bin', filters={'item_code': item}, fields=['item_code', 'actual_qty', 'warehouse'])
