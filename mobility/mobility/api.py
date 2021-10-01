@@ -10,13 +10,11 @@ def get_brands():
 
 @frappe.whitelist()
 def get_brand_items(brand):
-	r = frappe.db.sql('''SELECT DISTINCT i.item_code FROM ((`tabItem` i 
+	items = frappe.db.sql('''SELECT DISTINCT i.item_code AS value, i.item_name AS label FROM ((`tabItem` i 
 		INNER JOIN `tabBin` b ON i.item_code = b.item_code 
-		AND b.actual_qty > 0.0
 		AND i.brand = '{0}') 
 		INNER JOIN `tabWarehouse` w ON b.warehouse = w.name 
-		AND w.show_on_portal = 1)'''.format(brand), as_list=True)
-	items = [row[0] for row in r]
+		AND w.show_on_portal = 1)'''.format(brand), as_dict=True)
 	return items
 
 @frappe.whitelist()
