@@ -38,7 +38,8 @@ def get_stock_details(brand, item, qty):
 		'user': frappe.session.user
 	}).insert(ignore_permissions=True)
 
-	bins = frappe.db.get_list('Bin', filters={'item_code': item}, fields=['item_code', 'actual_qty', 'warehouse'])
+	warehouse = frappe.db.get_list('Warehouse', filters={'show_on_portal': 1}, pluck='name')
+	bins = frappe.db.get_list('Bin', filters={'item_code': item, 'warehouse': ['in', warehouse]}, fields=['item_code', 'actual_qty', 'warehouse'])
 
 	if len(bins) == 1:
 		if bins[0].actual_qty == frappe.utils.flt(0): 
