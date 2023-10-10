@@ -62,7 +62,7 @@ def get_stock_details(brand, item, qty):
 		elif row.actual_qty == frappe.utils.flt(0): 
 			stock_status = _('Not Available')
 		else:
-			stock_status = _('Not Enough ( {0} Units )').format(row.actual_qty)
+			stock_status = _('Not Enough')
 		response += '''<tr>
 			<th scope="row">{0}</th>
 			<td>{1}</td>
