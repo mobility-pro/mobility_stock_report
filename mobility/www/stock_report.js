@@ -1,5 +1,5 @@
-frappe.ready(() => {
-	$('#stock-report').empty();
+window.onload = function() {
+	$('#stock_report').empty();
 	this.form = new frappe.ui.FieldGroup({
 		fields: [
 			{
@@ -51,7 +51,7 @@ frappe.ready(() => {
 				fieldname: 'preview'
 			}
 		],
-		body: $('#stock-report')
+		body: $('#stock_report')
 	});
 	this.form.make();
 
@@ -95,6 +95,7 @@ frappe.ready(() => {
 					'item': item
 				},
 				callback: function(r) {
+					debugger
 					me.form.fields_dict.item.set_value(r.message);
 				}
 			});
@@ -106,7 +107,7 @@ frappe.ready(() => {
 				args: {
 					'brand': brand,
 					'item': item,
-					'qty': qty 
+					'qty': qty
 				},
 				callback: function(r) {
 					$('#datatable').html(r.message);
@@ -115,4 +116,8 @@ frappe.ready(() => {
 		}
 	}
 	this.get_brands();
-});
+}
+
+// frappe.ready(() => {
+
+// });

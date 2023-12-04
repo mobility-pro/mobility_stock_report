@@ -10,15 +10,15 @@ def get_brands():
 
 @frappe.whitelist()
 def get_brand_items(brand):
-	r = frappe.db.sql('''SELECT DISTINCT i.item_code AS item_code, i.item_name AS item_name FROM ((`tabItem` i 
-		INNER JOIN `tabBin` b ON i.item_code = b.item_code 
-		AND i.brand = '{0}') 
-		INNER JOIN `tabWarehouse` w ON b.warehouse = w.name 
+	r = frappe.db.sql('''SELECT DISTINCT i.item_code AS item_code, i.item_name AS item_name FROM ((`tabItem` i
+		INNER JOIN `tabBin` b ON i.item_code = b.item_code
+		AND i.brand = '{0}')
+		INNER JOIN `tabWarehouse` w ON b.warehouse = w.name
 		AND w.show_on_portal = 1)'''.format(brand), as_dict=True)
 	items = []
 	for d in r:
 		items.append({
-			'label': "{0} ({1})".format(d.item_name, d.item_code),
+			'label': d.item_code,
 			'value': d.item_code
 		})
 
@@ -42,7 +42,7 @@ def get_stock_details(brand, item, qty):
 	bins = frappe.db.get_all('Bin', filters={'item_code': item, 'warehouse': ['in', warehouse]}, fields=['item_code', 'actual_qty', 'warehouse'])
 
 	if len(bins) == 1:
-		if bins[0].actual_qty == frappe.utils.flt(0): 
+		if bins[0].actual_qty == frappe.utils.flt(0):
 			return ''
 
 	response = '''<table class="table table-striped">
@@ -54,12 +54,12 @@ def get_stock_details(brand, item, qty):
 			</tr>
 		</thead>
 		<tbody>'''.format(_('Warehouse'), _('Required Stock Status'))
-  
+
 	for idx,row in enumerate(bins):
 		stock_status = ''
 		if row.actual_qty >= frappe.utils.flt(qty):
 			stock_status = _('Available')
-		elif row.actual_qty == frappe.utils.flt(0): 
+		elif row.actual_qty == frappe.utils.flt(0):
 			stock_status = _('Not Available')
 		else:
 			stock_status = _('Not Enough ( {0} Units )').format(row.actual_qty)

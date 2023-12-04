@@ -9,17 +9,22 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="row" id="stock-report" style="justify-content: space-around">
+<div class="row" id="stock_report" style="justify-content: space-around">
 </div>
 <div class="row pt-5 m-auto w-50" id="datatable">
 </div>
 {% endblock %}
 {% block base_scripts %}
 <!-- js should be loaded in body! -->
+{{ include_script('frappe-web.bundle.js') }}
+{{ include_script('controls.bundle.js') }}
+{{ include_script('dialog.bundle.js') }}
+{{ include_script('bootstrap-4-web.bundle.js') }}
 <script type="text/javascript" src="/assets/frappe/js/lib/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="/assets/js/frappe-web.min.js"></script>
-<script type="text/javascript" src="/assets/js/control.min.js"></script>
-<script type="text/javascript" src="/assets/js/dialog.min.js"></script>
-<script type="text/javascript" src="/assets/js/bootstrap-4-web.min.js"></script>
-<script type="text/javascript" src="stock-report.js"></script>
+<script type="text/javascript" src="stock_report.js"></script>
+<style>
+	.tooltip-content {
+		display: none;
+	}
+</style>
 {% endblock %}
