@@ -18,7 +18,7 @@ def get_brand_items(brand):
 	items = []
 	for d in r:
 		items.append({
-			'label': d.item_code,
+			'label': "{0} ({1})".format(d.item_name, d.item_code),
 			'value': d.item_code
 		})
 
