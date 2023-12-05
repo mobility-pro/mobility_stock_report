@@ -85,7 +85,7 @@ window.onload = function() {
 	this.get_stock_details = function() {
 		let me = this;
 		let brand = me.form.fields_dict.brand.$input.val();
-		let item = me.form.fields_dict.item_name.$input.val();
+		let item = me.form.fields_dict.item_name.value;
 		let qty = me.form.fields_dict.required_qty.$input.val();
 
 		if (item) {
@@ -95,7 +95,6 @@ window.onload = function() {
 					'item': item
 				},
 				callback: function(r) {
-					debugger
 					me.form.fields_dict.item.set_value(r.message);
 				}
 			});
